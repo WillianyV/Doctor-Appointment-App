@@ -31,7 +31,7 @@ class _LoginFormState extends State<LoginForm> {
               labelText: 'Email',
               alignLabelWithHint: true,
               prefixIcon: Icon(Icons.email_outlined),
-              prefixIconColor: Config.primaryColor,
+              // prefixIconColor: Config.primaryColor,
             ),
           ),
           Config.spaceSmall,
@@ -45,7 +45,7 @@ class _LoginFormState extends State<LoginForm> {
                 labelText: 'Senha',
                 alignLabelWithHint: true,
                 prefixIcon: const Icon(Icons.lock_outline),
-                prefixIconColor: Config.primaryColor,
+                // prefixIconColor: Config.primaryColor,
                 suffixIcon: IconButton(
                     onPressed: () {
                       setState(() {
@@ -67,7 +67,9 @@ class _LoginFormState extends State<LoginForm> {
               width: double.infinity,
               title: 'Entrar',
               disable: false,
-              onPressed: () {})
+              onPressed: () {
+                Navigator.of(context).pushNamed('main');
+              })
         ],
       ),
     );

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/main_layout.dart';
 import 'package:front_end/screens/auth_page.dart';
+import 'package:front_end/screens/booking_page.dart';
+import 'package:front_end/screens/doctor_details_page.dart';
+import 'package:front_end/screens/success_booked.dart';
 import 'package:front_end/utils/config.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
-  runApp(const MyApp());
+  initializeDateFormatting().then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -42,7 +46,10 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const AuthPage(),
-        'main': (context) => const MainLayout()
+        'main': (context) => const MainLayout(),
+        'doc_details': (context) => const DoctorDetails(),
+        'booking_page': (context) => const BookingPage(),
+        'success_booked': (context) => const AppointmentBooked(),
       },
     );
   }
