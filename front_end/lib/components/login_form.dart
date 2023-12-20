@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/components/button.dart';
+import 'package:front_end/main.dart';
+import 'package:front_end/models/auth_model.dart';
+import 'package:front_end/providers/dio_provider.dart';
 import 'package:front_end/utils/config.dart';
+import 'package:provider/provider.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -63,13 +67,25 @@ class _LoginFormState extends State<LoginForm> {
                           ))),
           ),
           Config.spaceSmall,
-          Button(
-              width: double.infinity,
-              title: 'Entrar',
-              disable: false,
-              onPressed: () {
-                Navigator.of(context).pushNamed('main');
-              })
+          Consumer<AuthModel>(
+            builder: (context, auth, child) {
+              return Button(
+                width: double.infinity,
+                title: 'Entrar',
+                disable: false,
+                onPressed: () async {
+                  // login
+                  final token = await DioProvider()
+                      .getToken(_emailController.text, _passController.text);
+
+                  if (token) {
+                    auth.loginSuccess();
+                    MyApp.navigatorKey.currentState!.pushNamed('main');
+                  }
+                },
+              );
+            },
+          ),
         ],
       ),
     );

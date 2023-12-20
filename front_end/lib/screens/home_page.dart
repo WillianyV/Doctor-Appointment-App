@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:front_end/components/appointment_card.dart';
 import 'package:front_end/components/doctor_card.dart';
+import 'package:front_end/providers/dio_provider.dart';
 import 'package:front_end/utils/config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,6 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Map<String, dynamic> user = {};
   List<Map<String, dynamic>> medCat = [
     {"icon": FontAwesomeIcons.userDoctor, "category": "Clínico Geral"},
     {"icon": FontAwesomeIcons.heartPulse, "category": "Cardiologia"},
@@ -20,6 +25,28 @@ class _HomePageState extends State<HomePage> {
     {"icon": FontAwesomeIcons.personPregnant, "category": "Ginecologista"},
     {"icon": FontAwesomeIcons.brain, "category": "Neuro"},
   ];
+
+  Future<void> getData() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    final token = preferences.getString('token') ?? '';
+
+    if (token.isNotEmpty && token != '') {
+      final response = await DioProvider().getUser(token);
+
+      if (response != null) {
+        setState(() {
+          user = json.decode(response as String);
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Config().int(context);
@@ -35,17 +62,17 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      'Amanda',
-                      style: TextStyle(
+                      user['name'],
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       child: CircleAvatar(
                         radius: 30,
                         backgroundImage: AssetImage('assets/profile1.jpg'),

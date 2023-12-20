@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/components/login_form.dart';
+import 'package:front_end/components/sign_up_form.dart';
 import 'package:front_end/components/social_button.dart';
 import 'package:front_end/utils/config.dart';
 import 'package:front_end/utils/text.dart';
@@ -12,6 +13,7 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  bool isSignIn = true;
   @override
   Widget build(BuildContext context) {
     Config().int(context);
@@ -35,27 +37,32 @@ class _AuthPageState extends State<AuthPage> {
           ),
           Config.spaceSmall,
           Text(
-            AppTex.entText['singIn_tex']!,
+            isSignIn
+                ? AppTex.entText['singIn_tex']!
+                : AppTex.entText['register_tex']!,
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
           Config.spaceSmall,
-          const LoginForm(),
+          isSignIn ? LoginForm() : SingUpForm(),
           Config.spaceSmall,
-          Center(
-            child: TextButton(
-                onPressed: () {},
-                child: Text(
-                  AppTex.entText['forgot-password']!,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+          isSignIn
+              ? Center(
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      AppTex.entText['forgot-password']!,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
-                )),
-          ),
+                )
+              : Container(),
           const Spacer(),
           Center(
             child: Text(
@@ -80,19 +87,28 @@ class _AuthPageState extends State<AuthPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                AppTex.entText['singUp_tex']!,
+                isSignIn
+                    ? AppTex.entText['singUp_tex']!
+                    : AppTex.entText['registered_tex']!,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.normal,
                   color: Colors.grey.shade500,
                 ),
               ),
-              const Text(
-                'Cadastre-se',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    isSignIn = !isSignIn;
+                  });
+                },
+                child: Text(
+                  isSignIn ? 'Cadastre-se' : 'Login',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ],
